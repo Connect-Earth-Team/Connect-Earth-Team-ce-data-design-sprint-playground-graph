@@ -1,6 +1,6 @@
-import streamlit as st
 import pandas as pd
 import plotly.express as px
+import streamlit as st
 
 from utils import inputs as input_module
 
@@ -11,16 +11,6 @@ st.set_page_config(
     page_icon="🌍",
     initial_sidebar_state="collapsed",
 )
-
-def choose_inputs() -> list:
-    left, middle, right = st.columns([0.4, 0.4, 0.2])
-    with left:
-        n_panels = st.slider("Number of solar_panels: ", min_value=0, max_value=10, step=1)
-    with middle:
-        led_lighting = st.toggle("Switch to LED lighting: ")
-
-    items = [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led_lighting}]
-    return items
 
 # Load the data
 @st.cache_data
@@ -90,7 +80,7 @@ def plot_chart(data, metric):
 def main():
     st.title("Energy Usage Comparison")
     
-    inputs = choose_inputs()
+    inputs = input_module.choose_inputs()
 
     # Load data
     df = load_data(inputs)

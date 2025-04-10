@@ -1,4 +1,5 @@
 import pandas as pd
+import streamlit as st
 
 N_PERIODS = 12
 
@@ -12,25 +13,25 @@ ELEC_EMISSIONS = 0.3 # kg CO2e/kWh
 
 
 def row_panel_input(desc: str, input_func):
-    with st.container(border=True, height=60):
-        col_text, col_input = st.columns(2)
-        with col_text:
-            st.markdown(desc)
-        with col_input:
-            value = input_func()
+    with st.container(border=True, height=120):
+        value = input_func()
     return value
 
 def choose_inputs():
-    left, right = st.columns(2)
+    n_inputs = 2
+    INPUT_WIDTH = 0.1
+    col_sizes = [INPUT_WIDTH] * n_inputs
+    col_sizes.append(1 - n_inputs * INPUT_WIDTH)
+    left, middle, right = st.columns(col_sizes)
     with left:
         n_panels = row_panel_input(
             desc="☀️ **Number of Solar Panels:**",
-            input_func=lambda: st.number_input("", min_value=0, max_value=10, step=1, key="solar_panels")
+            input_func=lambda: st.slider("☀️ **Number of Solar Panels:**", min_value=0, max_value=10, step=1, key="solar_panels")
         )
-    with right:
+    with middle:
         led = row_panel_input(
             desc="💡 **Switch to LED Lighting:**",
-            input_func=lambda: st.checkbox("", key="led_lighting")
+            input_func=lambda: st.toggle("💡 **Switch to LED Lighting:**", key="led_lighting")
         )
         
     return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
