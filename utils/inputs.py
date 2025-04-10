@@ -4,12 +4,36 @@ N_PERIODS = 12
 
 # Savings data
 LIGHTING_SAVING = 0.05
-SAVING_PER_SOLAR_PANEL = 0.1
+SAVING_PER_SOLAR_PANEL = 0.1 # replace with array
 
 # other data
 ELEC_PRICE = 0.25 # £/kWh
 ELEC_EMISSIONS = 0.3 # kg CO2e/kWh
 
+
+def row_panel_input(desc: str, input_func):
+    with st.container(border=True, height=60):
+        col_text, col_input = st.columns(2)
+        with col_text:
+            st.markdown(desc)
+        with col_input:
+            value = input_func()
+    return value
+
+def choose_inputs():
+    left, right = st.columns(2)
+    with left:
+        n_panels = row_panel_input(
+            desc="☀️ **Number of Solar Panels:**",
+            input_func=lambda: st.number_input("", min_value=0, max_value=10, step=1, key="solar_panels")
+        )
+    with right:
+        led = row_panel_input(
+            desc="💡 **Switch to LED Lighting:**",
+            input_func=lambda: st.checkbox("", key="led_lighting")
+        )
+        
+    return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
 
 def apply_elec_consumption_reduction(consumption_values: list, reduction_pct: float):
     return [x * reduction_pct for x in consumption_values]
