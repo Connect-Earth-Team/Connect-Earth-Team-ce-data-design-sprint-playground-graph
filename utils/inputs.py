@@ -12,26 +12,28 @@ ELEC_PRICE = 0.25 # £/kWh
 ELEC_EMISSIONS = 0.3 # kg CO2e/kWh
 
 
-def row_panel_input(desc: str, input_func):
+def row_panel_input(input_func):
     with st.container(border=True, height=120):
         value = input_func()
     return value
 
 def choose_inputs():
-    n_inputs = 2
-    INPUT_WIDTH = 0.1
+    n_inputs = 3
+    INPUT_WIDTH = 0.35
     col_sizes = [INPUT_WIDTH] * n_inputs
-    col_sizes.append(1 - n_inputs * INPUT_WIDTH)
-    left, middle, right = st.columns(col_sizes)
-    with left:
+    col_sizes.append(max(1 - n_inputs * INPUT_WIDTH, 0.001))
+    columns = st.columns(col_sizes)
+    with columns[0]:
         n_panels = row_panel_input(
-            desc="☀️ **Number of Solar Panels:**",
             input_func=lambda: st.slider("☀️ **Number of Solar Panels:**", min_value=0, max_value=10, step=1, key="solar_panels")
         )
-    with middle:
+    with columns[1]:
         led = row_panel_input(
-            desc="💡 **Switch to LED Lighting:**",
             input_func=lambda: st.toggle("💡 **Switch to LED Lighting:**", key="led_lighting")
+        )
+    with columns[2]:
+        row_panel_input(
+            input_func=lambda: st.toggle("👀 **Coming soon...**", key="electronics", disabled=True)
         )
         
     return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
