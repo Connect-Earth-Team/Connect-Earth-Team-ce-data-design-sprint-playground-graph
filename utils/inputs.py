@@ -1,5 +1,4 @@
 import pandas as pd
-import streamlit as st
 
 N_PERIODS = 12
 
@@ -11,13 +10,6 @@ SAVING_PER_SOLAR_PANEL = 0.1
 ELEC_PRICE = 0.25 # £/kWh
 ELEC_EMISSIONS = 0.3 # kg CO2e/kWh
 
-
-def choose_inputs() -> list:
-    left, middle, right = st.columns([0.2, 0.2, 0.2])
-    with right:
-        n_panels = st.number_input("Number of solar_panels: ", min_value=0, max_value=10, step=1)
-        led_lighting = st.checkbox("Switch to LED lighting: ")
-    return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led_lighting}]
 
 def apply_elec_consumption_reduction(consumption_values: list, reduction_pct: float):
     return [x * reduction_pct for x in consumption_values]
