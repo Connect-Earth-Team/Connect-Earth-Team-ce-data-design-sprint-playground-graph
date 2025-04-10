@@ -1,13 +1,14 @@
-,elec_consumption_kwh,elec_spend_gbp,elec_emissions_kg_co2e
-January,300,75,90
-February,300,75,90
-March,300,75,90
-April,300,75,90
-May,300,75,90
-June,300,75,90
-July,300,75,90
-August,300,75,90
-September,300,75,90
-October,300,75,90
-November,300,75,90
-December,300,75,90
+
+,elec_consumption_kwh,elec_spend_gbp,elec_emissions_kg_co2e,Percentage Spend
+January,378,94.5,113.4,10.50%
+February,342,85.5,102.6,9.50%
+March,324,81,97.2,9%
+April,288,72,86.4,8%
+May,252,63,75.6,7%
+June,234,58.5,70.2,6.50%
+July,234,58.5,70.2,6.50%
+August,234,58.5,70.2,6.50%
+September,252,63,75.6,7%
+October,288,72,86.4,8%
+November,360,90,108,10%
+December,414,103.5,124.2,11.50%
