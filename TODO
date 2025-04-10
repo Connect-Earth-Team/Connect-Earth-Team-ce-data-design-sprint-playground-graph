@@ -1,0 +1,44 @@
+- upload data
+-
+
+Playground first version
+- basic data display: electricity w no actions
+    - chart: time vs spend & kg CO2e
+    - toggle axes: spend, carbon or both
+
+- choose actions
+    - list of possible actions (most greyed out)
+        - possible impact + cost
+    - calucate 1 action for first version: solar panels
+        - checkbox/input number of panels (default 16)
+        - (stretch) property details
+        - calculation + update chart
+    - (stretch) add other actions
+
+- summary stats
+    - total emissions
+    - total modelled savings
+    - total cost
+    - potential ROI calculation
+
+- (stretch) ROI chart
+    - cumulative spend and savings over time
+
+
+
+actions
+- electricity
+    - renewable elec
+    - efficient appliances
+        - efficient lighting (-5% total emission from electricity)
+        - assume all D now, show impact of all A
+        - (stretch) mock choose specific ones
+- heating
+    - switch to electric heating
+    - switch to electric heating + heat pump
+- transport
+    - EVs
+    - public transport
+- lifestyle
+    - diet
+    - travel
