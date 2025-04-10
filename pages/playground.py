@@ -7,12 +7,13 @@ import utils.inputs as inputs
 def main():
     st.title("Playgrounnnndddd")
 
+    st.title("Inputs")
+    inputs.main()
+
     st.title("Display")
     display.main()
 
 
-    st.title("Inputs")
-    inputs.main()
 
 
 if __name__ == "__main__":
