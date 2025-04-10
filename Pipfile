@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ipykernel = "6.25.2"
+numpy = "1.26.0"
+pandas = "2.1.1"
+matplotlib = "3.8.0"
+streamlit = "1.33.0"
+boto3 = "1.34.96"
+openpyxl = "3.1.2"
+seaborn = "0.13.2"
+
+[scripts]
+
+[requires]
+python = "3.11.3"
