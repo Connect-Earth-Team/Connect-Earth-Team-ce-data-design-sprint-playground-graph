@@ -46,35 +46,59 @@ def prepare_data_for_plotting(df, metric_display_name):
     return plot_data
 
 def plot_chart(data, metric):
-    """Create a Plotly chart with the given data and metric"""
+    """Create a Plotly bar chart with the given data and metric"""
     # Set colors based on metric type
-    color = 'red' if '£' in metric else ('green' if 'kWh' in metric else 'blue')
-    line_dash_map = {'original': 'dash', 'modified': 'solid'}
+    base_color = '#e74c3c' if '£' in metric else ('#2ecc71' if 'kWh' in metric else '#3498db')
+
+    # Define color_discrete_map with original as a lighter (transparent) shade of the base color
+    color_discrete_map = {
+        'modified': base_color,  # Keep the base color as is
+        'original': f'rgba({int(base_color[1:3], 16)}, {int(base_color[3:5], 16)}, {int(base_color[5:7], 16)}, 0.4)'  # Make original 40% opacity (lighter)
+    }
     
     fig = px.bar(
         data,
         x='Month',
         y='Value',
-        # color='View',
-        # line_dash='View',
-        # line_dash_map=line_dash_map,
-        # markers=True,
+        color='View',
+        barmode='stack',
         title=f"{metric} - Comparison View",
-        color_discrete_map={'modified': color, 'original': color}
+        color_discrete_map=color_discrete_map,
+        category_orders={'View': ['modified', 'original']}
     )
-    
+
     fig.update_layout(
-        yaxis=dict(title=metric.split('(')[1].strip(')') if '(' in metric else metric, 
-                  range=[0, data['Value'].max() * 1.1]),
-        xaxis=dict(title="Month", showline=True, linewidth=1, linecolor='black', 
-                   mirror=True, ticks='outside', categoryorder='array', 
-                   categoryarray=['January', 'February', 'March', 'April', 'May', 'June', 
-                                 'July', 'August', 'September', 'October', 'November', 'December']),
+        yaxis=dict(
+            title=metric.split('(')[1].strip(')') if '(' in metric else metric,
+            range=[0, data['Value'].max() * 1.1]
+        ),
+        xaxis=dict(
+            title="Month",
+            showline=True,
+            linewidth=1,
+            linecolor='black',
+            mirror=True,
+            ticks='outside',
+            categoryorder='array',
+            categoryarray=[
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ]
+        ),
         margin=dict(t=40, b=40),
         height=500,
-        legend_title="Data Type"
+        legend_title="View",
+        legend=dict(
+            itemclick='toggleothers',  # Optional: allow clicking on legend to hide other traces
+            traceorder='reversed',  # Set the order based on how they appear in category_orders
+            orientation='v',  # Optionally change the orientation if you prefer horizontal
+            itemsizing='constant',
+            x=1.05,  # Position the legend, adjust as needed
+            y=1.05,  # Adjust vertical position
+            tracegroupgap=5
+        )
     )
-    
+
     return fig
 
 def main():
