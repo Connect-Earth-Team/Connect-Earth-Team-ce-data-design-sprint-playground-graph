@@ -5,10 +5,15 @@ import plotly.express as px
 from utils import inputs as input_module
 
 # Set page config
-st.set_page_config(page_title="Energy Usage Comparison", layout="wide")
+st.set_page_config(
+    page_title="Energy Usage Comparison",
+    layout="centered",
+    page_icon="🌍",
+    initial_sidebar_state="collapsed",
+)
 
 def choose_inputs() -> list:
-    left, middle, right = st.columns([0.1, 0.2, 0.7])
+    left, middle, right = st.columns([0.4, 0.4, 0.2])
     with left:
         n_panels = st.slider("Number of solar_panels: ", min_value=0, max_value=10, step=1)
     with middle:
@@ -56,14 +61,14 @@ def plot_chart(data, metric):
     color = 'red' if '£' in metric else ('green' if 'kWh' in metric else 'blue')
     line_dash_map = {'original': 'dash', 'modified': 'solid'}
     
-    fig = px.line(
+    fig = px.bar(
         data,
         x='Month',
         y='Value',
-        color='View',
-        line_dash='View',
-        line_dash_map=line_dash_map,
-        markers=True,
+        # color='View',
+        # line_dash='View',
+        # line_dash_map=line_dash_map,
+        # markers=True,
         title=f"{metric} - Comparison View",
         color_discrete_map={'modified': color, 'original': color}
     )
@@ -89,20 +94,18 @@ def main():
 
     # Load data
     df = load_data(inputs)
-
-    # Sidebar for controls
-    st.sidebar.header("Controls")
     
     # Get column mapping
     column_pairs = get_column_pairs()
     
     # Metric selection
     metric_options = list(column_pairs.keys())
-    selected_metric = st.sidebar.selectbox("Select Metric", metric_options)
+    selected_metric = st.selectbox("Select Metric", metric_options)
     
     # View selection
-    view_options = ["Both", "Original Only", "Modified Only"]
-    selected_view = st.sidebar.radio("View", view_options)
+    # view_options = ["Both", "Original Only", "Modified Only"]
+    # selected_view = st.sidebar.radio("View", view_options)
+    selected_view = "Both"
     
     # Prepare data based on selections
     plot_data = prepare_data_for_plotting(df, selected_metric)
