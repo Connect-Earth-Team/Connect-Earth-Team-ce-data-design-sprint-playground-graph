@@ -61,6 +61,4 @@ def calculate_impact_of_modifiers(modifiers: list, data_raw: pd.DataFrame) -> pd
 def main(data_raw: pd.DataFrame) -> pd.DataFrame:
     inputs = choose_inputs()
     modified_data = calculate_impact_of_modifiers(modifiers=inputs, data_raw=data_raw)
-    st.dataframe(modified_data)
-    modified_data.to_csv("data/elec_consumption_modified.csv")
     return modified_data

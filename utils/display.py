@@ -1,6 +1,7 @@
-import streamlit as st
 import pandas as pd
 import plotly.express as px
+import streamlit as st
+
 
 def load_data():
     df = pd.read_csv("data/elec_consumption.csv", index_col=0)
@@ -42,9 +43,9 @@ def plot_chart(data, metric):
 def calculate_total(df, metric, views):
     return {view: df[f"{metric} ({view})"].sum() for view in views}
 
-def main():
+def main(data_modified: pd.DataFrame):
     st.write("## Electricity Usage: Cost & CO2 Savings")
-    df = load_data()
+    df = data_modified
 
     metric = st.selectbox("Select Metric", ['£ elec', 'kg CO2e'])
 
