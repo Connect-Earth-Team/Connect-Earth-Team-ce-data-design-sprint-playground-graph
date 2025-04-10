@@ -13,7 +13,7 @@ st.set_page_config(
 )
 
 # Load the data
-@st.cache_data
+# @st.cache_data <- removed because it was causing a bug in the calculation when inputs changed
 def load_data(inputs):
     # Using the data provided but with new column names
     data_raw = pd.read_csv("data/elec_consumption.csv", index_col=0).reset_index(names='Month')
