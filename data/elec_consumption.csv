@@ -1,9 +1,13 @@
-Month,January,February,March,April,May,June,July,August,September,October,November,December
-kWh elec (estimated),300,300,300,300,300,300,300,300,300,300,300,300
-kWh elec (actual),360,330,300,285,285,270,270,249,270,315,300,360
-,,,,,,,,,,,,
-£ elec (estimated),75,75,75,75,75,75,75,75,75,75,75,75
-£ elec (actual),90,82.5,75,71.25,71.25,67.5,67.5,62.25,67.5,78.75,75,90
-,,,,,,,,,,,,
-kg CO2e (estimated),90,90,90,90,90,90,90,90,90,90,90,90
-kg CO2e (actual),108,99,90,85.5,85.5,81,81,74.7,81,94.5,90,108
+,elec_consumption_kwh,elec_spend_gbp,elec_emissions_kg_co2e
+January,300,75,90
+February,300,75,90
+March,300,75,90
+April,300,75,90
+May,300,75,90
+June,300,75,90
+July,300,75,90
+August,300,75,90
+September,300,75,90
+October,300,75,90
+November,300,75,90
+December,300,75,90
