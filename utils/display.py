@@ -101,9 +101,7 @@ def plot_chart(data, metric):
 
     return fig
 
-def main():
-    st.title("Energy Usage Comparison")
-    
+def main():    
     inputs = input_module.choose_inputs()
 
     # Load data
@@ -139,31 +137,52 @@ def main():
         st.plotly_chart(fig, use_container_width=True)
         
         # Display statistics
-        st.subheader("Statistics")
-        col1, col2 = st.columns(2)
-        
-        # Get column names for the selected metric
-        base_col, modified_col = column_pairs[selected_metric]
-        
-        # Calculate statistics for original data
-        base_data = df[base_col]
-        
-        with col1:
-            st.markdown("**Original Data**")
-            st.write(f"Average: {base_data.mean():.2f}")
-            st.write(f"Total: {base_data.sum():.2f}")
-            st.write(f"Min: {base_data.min():.2f}")
-            st.write(f"Max: {base_data.max():.2f}")
-        
-        # Calculate statistics for modified data
-        modified_data = df[modified_col]
-        
-        with col2:
-            st.markdown("**Modified Data**")
-            st.write(f"Average: {modified_data.mean():.2f}")
-            st.write(f"Total: {modified_data.sum():.2f}")
-            st.write(f"Min: {modified_data.min():.2f}")
-            st.write(f"Max: {modified_data.max():.2f}")
+        base_emissions_data = df["elec_emissions_kg_co2e"]
+        modified_emissions_data = df["elec_emissions_modified_kg_co2e"]
+        base_spend_data = df["elec_spend_gbp"]
+        modified_spend_data = df["elec_spend_modified_gbp"]
+
+        # Calculate stats
+        base_stats = {
+            "Total Spend": base_emissions_data.sum(),
+            "Total Emissions": base_spend_data.sum()
+        }
+
+        mod_stats = {
+            "Total Spend": modified_emissions_data.sum(),
+            "Total Emissions": modified_spend_data.sum()
+        }
+
+        # Show impact/difference
+        st.markdown("### 🔍 Impact of Green Measures")
+
+        impact_cols = st.columns(2)
+
+        for idx, key in enumerate(base_stats.keys()):
+            diff = mod_stats[key] - base_stats[key]
+            with impact_cols[idx]:
+                if key == "Total Spend":
+                    metric_prefix = "£ "
+                    metric_suffix = ""
+                elif key == "Total Emissions":
+                    metric_prefix = ""
+                    metric_suffix = " kg CO2e"
+                    
+                if diff != 0:
+                    st.metric(
+                        label=key,
+                        value=f"{metric_prefix}{mod_stats[key]:.2f}{metric_suffix}",
+                        delta=f"{diff:+.2f}",
+                        delta_color="inverse",
+                        border=True
+                    )
+                else:
+                    st.metric(
+                        label=key,
+                        value=f"{metric_prefix}{mod_stats[key]:.2f}{metric_suffix}",
+                        border=True
+                        # no delta shown if diff is 0
+                    )
     
     with tab2:
         # Display data table
