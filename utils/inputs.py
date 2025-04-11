@@ -12,50 +12,46 @@ ELEC_PRICE = 0.25 # £/kWh
 ELEC_EMISSIONS = 0.3 # kg CO2e/kWh
 
 
-def row_panel_input(input_func):
-    with st.container(border=True, height=120):
+def row_panel_input(input_func, height: int):
+    with st.container(border=True, height=height):
         value = input_func()
     return value
 
 def choose_inputs():
-    n_inputs = 3
-    INPUT_WIDTH = 0.35
+    n_inputs = 2
+    INPUT_WIDTH = 0.3
     col_sizes = [INPUT_WIDTH] * n_inputs
     col_sizes.append(max(1 - n_inputs * INPUT_WIDTH, 0.001))
     columns = st.columns(col_sizes)
     with columns[0]:
         n_panels = row_panel_input(
-            input_func=lambda: st.slider("☀️  **Number of Solar Panels**", min_value=0, max_value=10, step=1, key="solar_panels")
+            input_func=lambda: st.slider("☀️  **Number of Solar Panels**", min_value=0, max_value=10, step=1, key="solar_panels"),
+            height=110
         )
     with columns[1]:
         led = row_panel_input(
-            input_func=lambda: st.toggle("💡  **Switch to LED Lighting**", key="led_lighting")
-        )
-    with columns[2]:
-        row_panel_input(
-            input_func=lambda: st.toggle("👀 **Coming soon...**", key="electronics", disabled=True)
+            input_func=lambda: st.toggle("💡  **Switch to LED Lighting**", key="led_lighting"),
+            height=70
         )
         
     return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
 
 
 def hard_coded_disabled_inputs():
-    n_inputs = 3
+    n_inputs = 2
     INPUT_WIDTH = 0.35
     col_sizes = [INPUT_WIDTH] * n_inputs
     col_sizes.append(max(1 - n_inputs * INPUT_WIDTH, 0.001))
     columns = st.columns(col_sizes)
     with columns[0]:
         n_panels = row_panel_input(
-            input_func=lambda: st.slider("☀️ **Number of Solar Panels:**", min_value=0, max_value=10, step=1, key="solar_panels", value=6, disabled=True)
+            input_func=lambda: st.slider("☀️ **Number of Solar Panels:**", min_value=0, max_value=10, step=1, key="solar_panels", value=6, disabled=True),
+            height=110
         )
     with columns[1]:
         led = row_panel_input(
-            input_func=lambda: st.toggle("💡 **Switch to LED Lighting:**", key="led_lighting", value=True, disabled=True)
-        )
-    with columns[2]:
-        row_panel_input(
-            input_func=lambda: st.toggle("👀 **Coming soon...**", key="electronics", disabled=True)
+            input_func=lambda: st.toggle("💡 **Switch to LED Lighting:**", key="led_lighting", value=True, disabled=True),
+            height=70
         )
 
     return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
