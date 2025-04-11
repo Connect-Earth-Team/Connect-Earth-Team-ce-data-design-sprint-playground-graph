@@ -1,11 +1,11 @@
 - upload data
 
 
-- fix data display after rebase (I)
+~~- fix data display after rebase (I)~~
 - add more information about ROI and results (Y)
-- aligned json of actions (W)
-- pretty display of actions (grey out all except two) (J)
-- plot shows current and planned
+~~- aligned json of actions (W)~~
+~~- pretty display of actions (grey out all except two) (J)~~
+~~- plot shows current and planned~~
 - second page showing pre-selected results (no inputs)
 
 
