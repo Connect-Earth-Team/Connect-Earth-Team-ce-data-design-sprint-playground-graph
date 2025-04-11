@@ -4,6 +4,7 @@ import streamlit as st
 
 from utils import inputs as input_module
 
+
 # Load the data
 # @st.cache_data <- removed because it was causing a bug in the calculation when inputs changed
 def load_data(inputs):
@@ -137,10 +138,17 @@ def main():
         "Total Emissions": modified_spend_data.sum()
     }
 
+    n_panels = [input_data for input_data in inputs if input_data["name"] == "solar_panels"][0]["value"]
+    annual_savings = base_emissions_data.sum() - modified_emissions_data.sum()
+    led_lighting_bool = [input_data for input_data in inputs if input_data["name"] == "led_lighting"][0]["value"]
+    cost = 300 * n_panels + 200 * int(led_lighting_bool) # £300 per panel + £200 for LED lighting
+
+    payback_period_years = cost / annual_savings if annual_savings else "no savings"
+
     # Show impact/difference
     st.markdown("### 🔍 Impact of Green Measures")
 
-    impact_cols = st.columns(2)
+    impact_cols = st.columns(3)
 
     for idx, key in enumerate(base_stats.keys()):
         diff = mod_stats[key] - base_stats[key]
@@ -167,6 +175,14 @@ def main():
                     border=True
                     # no delta shown if diff is 0
                 )
+    if payback_period_years != "no savings":
+        with impact_cols[2]:
+            st.metric(
+                        label="Payback Period",
+                        value=f"{payback_period_years:.1f} years",
+                        border=True
+                        # no delta shown if diff is 0
+                    )
 
 
 if __name__ == "__main__":
