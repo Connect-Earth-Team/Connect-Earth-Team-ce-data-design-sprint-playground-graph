@@ -101,9 +101,7 @@ def plot_chart(data, metric):
 
     return fig
 
-def main():
-    st.title("Energy Usage Comparison")
-    
+def main():    
     inputs = input_module.choose_inputs()
 
     # Load data
