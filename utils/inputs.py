@@ -38,6 +38,29 @@ def choose_inputs():
         
     return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
 
+
+def hard_coded_disabled_inputs():
+    n_inputs = 3
+    INPUT_WIDTH = 0.35
+    col_sizes = [INPUT_WIDTH] * n_inputs
+    col_sizes.append(max(1 - n_inputs * INPUT_WIDTH, 0.001))
+    columns = st.columns(col_sizes)
+    with columns[0]:
+        n_panels = row_panel_input(
+            input_func=lambda: st.slider("☀️ **Number of Solar Panels:**", min_value=0, max_value=10, step=1, key="solar_panels", value=6, disabled=True)
+        )
+    with columns[1]:
+        led = row_panel_input(
+            input_func=lambda: st.toggle("💡 **Switch to LED Lighting:**", key="led_lighting", value=True, disabled=True)
+        )
+    with columns[2]:
+        row_panel_input(
+            input_func=lambda: st.toggle("👀 **Coming soon...**", key="electronics", disabled=True)
+        )
+
+    return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
+
+
 def apply_elec_consumption_reduction(consumption_values: list, reduction_pct: float):
     return [x * reduction_pct for x in consumption_values]
 

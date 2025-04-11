@@ -101,8 +101,12 @@ def plot_chart(data, metric):
 
     return fig
 
-def main():    
-    inputs = input_module.choose_inputs()
+
+def main():
+    if st.session_state["current_page"] == "app":
+        inputs = input_module.choose_inputs()
+    elif st.session_state["current_page"] == "action chosen":
+        inputs = input_module.hard_coded_disabled_inputs()
 
     # Load data
     df = load_data(inputs)
