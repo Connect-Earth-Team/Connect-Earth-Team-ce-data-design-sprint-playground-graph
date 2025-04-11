@@ -25,11 +25,11 @@ def choose_inputs():
     columns = st.columns(col_sizes)
     with columns[0]:
         n_panels = row_panel_input(
-            input_func=lambda: st.slider("☀️ **Number of Solar Panels:**", min_value=0, max_value=10, step=1, key="solar_panels")
+            input_func=lambda: st.slider("☀️  **Number of Solar Panels**", min_value=0, max_value=10, step=1, key="solar_panels")
         )
     with columns[1]:
         led = row_panel_input(
-            input_func=lambda: st.toggle("💡 **Switch to LED Lighting:**", key="led_lighting")
+            input_func=lambda: st.toggle("💡  **Switch to LED Lighting**", key="led_lighting")
         )
     with columns[2]:
         row_panel_input(
