@@ -4,14 +4,6 @@ import streamlit as st
 
 from utils import inputs as input_module
 
-# Set page config
-st.set_page_config(
-    page_title="Energy Usage Comparison",
-    layout="centered",
-    page_icon="🌍",
-    initial_sidebar_state="collapsed",
-)
-
 # Load the data
 # @st.cache_data <- removed because it was causing a bug in the calculation when inputs changed
 def load_data(inputs):
@@ -123,71 +115,59 @@ def main():
         plot_data = plot_data[plot_data['View'] == 'original']
     elif selected_view == "Modified Only":
         plot_data = plot_data[plot_data['View'] == 'modified']
+
+    # Plot the chart
+    fig = plot_chart(plot_data, selected_metric)
+    st.plotly_chart(fig, use_container_width=True, config = {"displayModeBar": False})
     
-    # Create tabs for visualization and data
-    tab1, tab2 = st.tabs(["Chart", "Data"])
-    
-    with tab1:
-        # Plot the chart
-        fig = plot_chart(plot_data, selected_metric)
-        st.plotly_chart(fig, use_container_width=True, config = {"displayModeBar": False})
-        
-        # Display statistics
-        base_emissions_data = df["elec_emissions_kg_co2e"]
-        modified_emissions_data = df["elec_emissions_modified_kg_co2e"]
-        base_spend_data = df["elec_spend_gbp"]
-        modified_spend_data = df["elec_spend_modified_gbp"]
+    # Display statistics
+    base_emissions_data = df["elec_emissions_kg_co2e"]
+    modified_emissions_data = df["elec_emissions_modified_kg_co2e"]
+    base_spend_data = df["elec_spend_gbp"]
+    modified_spend_data = df["elec_spend_modified_gbp"]
 
-        # Calculate stats
-        base_stats = {
-            "Total Spend": base_emissions_data.sum(),
-            "Total Emissions": base_spend_data.sum()
-        }
+    # Calculate stats
+    base_stats = {
+        "Total Spend": base_emissions_data.sum(),
+        "Total Emissions": base_spend_data.sum()
+    }
 
-        mod_stats = {
-            "Total Spend": modified_emissions_data.sum(),
-            "Total Emissions": modified_spend_data.sum()
-        }
+    mod_stats = {
+        "Total Spend": modified_emissions_data.sum(),
+        "Total Emissions": modified_spend_data.sum()
+    }
 
-        # Show impact/difference
-        st.markdown("### 🔍 Impact of Green Measures")
+    # Show impact/difference
+    st.markdown("### 🔍 Impact of Green Measures")
 
-        impact_cols = st.columns(2)
+    impact_cols = st.columns(2)
 
-        for idx, key in enumerate(base_stats.keys()):
-            diff = mod_stats[key] - base_stats[key]
-            with impact_cols[idx]:
-                if key == "Total Spend":
-                    metric_prefix = "£ "
-                    metric_suffix = ""
-                elif key == "Total Emissions":
-                    metric_prefix = ""
-                    metric_suffix = " kg CO2e"
-                    
-                if diff != 0:
-                    st.metric(
-                        label=key,
-                        value=f"{metric_prefix}{mod_stats[key]:.2f}{metric_suffix}",
-                        delta=f"{diff:+.2f}",
-                        delta_color="inverse",
-                        border=True
-                    )
-                else:
-                    st.metric(
-                        label=key,
-                        value=f"{metric_prefix}{mod_stats[key]:.2f}{metric_suffix}",
-                        border=True
-                        # no delta shown if diff is 0
-                    )
-    
-    with tab2:
-        # Display data table
-        st.subheader("Raw Data")
-        
-        # Display only relevant columns
-        base_col, modified_col = column_pairs[selected_metric]
-        display_cols = ['Month', base_col, modified_col]
-        st.dataframe(df[display_cols], use_container_width=True)
+    for idx, key in enumerate(base_stats.keys()):
+        diff = mod_stats[key] - base_stats[key]
+        with impact_cols[idx]:
+            if key == "Total Spend":
+                metric_prefix = "£ "
+                metric_suffix = ""
+            elif key == "Total Emissions":
+                metric_prefix = ""
+                metric_suffix = " kg CO2e"
+                
+            if diff != 0:
+                st.metric(
+                    label=key,
+                    value=f"{metric_prefix}{mod_stats[key]:.2f}{metric_suffix}",
+                    delta=f"{diff:+.2f}",
+                    delta_color="inverse",
+                    border=True
+                )
+            else:
+                st.metric(
+                    label=key,
+                    value=f"{metric_prefix}{mod_stats[key]:.2f}{metric_suffix}",
+                    border=True
+                    # no delta shown if diff is 0
+                )
+
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,13 @@ import utils.display as display
 import streamlit as st
 
 def main():
+    # Set page config
+    st.set_page_config(
+        page_title="Energy Usage Comparison",
+        layout="centered",
+        page_icon="🌍",
+        initial_sidebar_state="collapsed",
+    )
     st.session_state["current_page"] = 'app'
     display.main()
 
