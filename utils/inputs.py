@@ -43,16 +43,8 @@ def hard_coded_disabled_inputs():
     col_sizes = [INPUT_WIDTH] * n_inputs
     col_sizes.append(max(1 - n_inputs * INPUT_WIDTH, 0.001))
     columns = st.columns(col_sizes)
-    with columns[0]:
-        n_panels = row_panel_input(
-            input_func=lambda: st.slider("☀️ **Number of Solar Panels:**", min_value=0, max_value=10, step=1, key="solar_panels", value=6, disabled=True),
-            height=110
-        )
-    with columns[1]:
-        led = row_panel_input(
-            input_func=lambda: st.toggle("💡 **Switch to LED Lighting:**", key="led_lighting", value=True, disabled=True),
-            height=70
-        )
+    n_panels = 6
+    led =True
 
     return [{"name": "solar_panels", "value": n_panels}, {"name": "led_lighting", "value": led}]
 

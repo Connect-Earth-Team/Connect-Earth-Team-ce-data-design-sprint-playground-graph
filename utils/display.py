@@ -23,7 +23,14 @@ def get_column_pairs():
         "Electricity Consumption (kWh)": ("elec_consumption_kwh", "elec_consumption_modified"),
     }
 
-def prepare_data_for_plotting(df, metric_display_name):
+def get_selected_metric():
+    column_pairs = get_column_pairs()
+    metric_options = list(column_pairs.keys())
+    selected_metric = st.selectbox("Select Metric", metric_options)
+    return selected_metric
+
+
+def prepare_data_for_plotting(df, metric_display_name, selected_view="Both"):
     """Prepare data for plotting by restructuring it for Plotly"""
     # Get the column pairs for the selected metric
     column_pairs = get_column_pairs()
@@ -35,7 +42,12 @@ def prepare_data_for_plotting(df, metric_display_name):
         'Value': df[base_col].tolist() + df[modified_col].tolist(),
         'View': ['original'] * len(df) + ['modified'] * len(df)
     })
-    
+     # Filter data based on view selection
+    if selected_view == "Original Only":
+        plot_data = plot_data[plot_data['View'] == 'original']
+    elif selected_view == "Modified Only":
+        plot_data = plot_data[plot_data['View'] == 'modified']
+
     return plot_data
 
 def plot_chart(data, metric):
@@ -87,41 +99,7 @@ def plot_chart(data, metric):
     return fig
 
 
-def main():
-    if st.session_state["current_page"] == "app":
-        inputs = input_module.choose_inputs()
-    elif st.session_state["current_page"] == "action chosen":
-        inputs = input_module.hard_coded_disabled_inputs()
-
-    # Load data
-    df = load_data(inputs)
-    
-    # Get column mapping
-    column_pairs = get_column_pairs()
-    
-    # Metric selection
-    metric_options = list(column_pairs.keys())
-    selected_metric = st.selectbox("Select Metric", metric_options)
-    
-    # View selection
-    # view_options = ["Both", "Original Only", "Modified Only"]
-    # selected_view = st.sidebar.radio("View", view_options)
-    selected_view = "Both"
-    
-    # Prepare data based on selections
-    plot_data = prepare_data_for_plotting(df, selected_metric)
-    
-    # Filter data based on view selection
-    if selected_view == "Original Only":
-        plot_data = plot_data[plot_data['View'] == 'original']
-    elif selected_view == "Modified Only":
-        plot_data = plot_data[plot_data['View'] == 'modified']
-
-    # Plot the chart
-    fig = plot_chart(plot_data, selected_metric)
-    st.plotly_chart(fig, use_container_width=True, config = {"displayModeBar": False})
-    
-    # Display statistics
+def get_stats(inputs, df):
     base_emissions_data = df["elec_emissions_kg_co2e"]
     modified_emissions_data = df["elec_emissions_modified_kg_co2e"]
     base_spend_data = df["elec_spend_gbp"]
@@ -145,7 +123,10 @@ def main():
 
     payback_period_years = cost / annual_savings if annual_savings else "no savings"
 
-    # Show impact/difference
+    return base_stats, mod_stats, payback_period_years
+
+
+def show_impact_stats(base_stats, mod_stats, payback_period_years):
     st.markdown("### 🔍 Impact of Green Measures")
 
     impact_cols = st.columns(3)
@@ -178,11 +159,38 @@ def main():
     if payback_period_years != "no savings":
         with impact_cols[2]:
             st.metric(
-                        label="Payback Period",
-                        value=f"{payback_period_years:.1f} years",
-                        border=True
-                        # no delta shown if diff is 0
-                    )
+                label="Payback Period",
+                value=f"{payback_period_years:.1f} years",
+                border=True
+                # no delta shown if diff is 0
+            )
+
+
+def main():
+    if st.session_state["current_page"] == "app":
+        inputs = input_module.choose_inputs()
+        selected_metric = get_selected_metric()
+    elif st.session_state["current_page"] == "action chosen":
+        inputs = input_module.hard_coded_disabled_inputs()
+        selected_metric = "Electricity Bills (£)"
+
+    # get data
+    df = load_data(inputs)
+
+    # View selection
+    # view_options = ["Both", "Original Only", "Modified Only"]
+    # selected_view = st.sidebar.radio("View", view_options)
+    selected_view = "Both"
+    plot_data = prepare_data_for_plotting(df, selected_metric, selected_view)
+    fig = plot_chart(plot_data, selected_metric)
+    st.plotly_chart(fig, use_container_width=True, config = {"displayModeBar": False})
+
+    if st.session_state["current_page"] == "app":
+        # Display statistics
+        base_stats, mod_stats, payback_period_years = get_stats(inputs, df)
+
+        # Show impact/difference
+        show_impact_stats(base_stats, mod_stats, payback_period_years)
 
 
 if __name__ == "__main__":
