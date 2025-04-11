@@ -62,10 +62,12 @@ def plot_chart(data, metric):
         y='Value',
         color='View',
         barmode='overlay',
-        title=f"{metric} - Comparison View",
+        title=f"{metric}",
         color_discrete_map=color_discrete_map,
         category_orders={'View': ['modified', 'original']}
     )
+
+    fig.update_layout(showlegend=False)
 
     fig.update_layout(
         yaxis=dict(
@@ -87,16 +89,6 @@ def plot_chart(data, metric):
         ),
         margin=dict(t=40, b=40),
         height=500,
-        legend_title="View",
-        legend=dict(
-            itemclick='toggleothers',  # Optional: allow clicking on legend to hide other traces
-            traceorder='reversed',  # Set the order based on how they appear in category_orders
-            orientation='v',  # Optionally change the orientation if you prefer horizontal
-            itemsizing='constant',
-            x=1.05,  # Position the legend, adjust as needed
-            y=1.05,  # Adjust vertical position
-            tracegroupgap=5
-        )
     )
 
     return fig
@@ -138,7 +130,7 @@ def main():
     with tab1:
         # Plot the chart
         fig = plot_chart(plot_data, selected_metric)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, config = {"displayModeBar": False})
         
         # Display statistics
         base_emissions_data = df["elec_emissions_kg_co2e"]
