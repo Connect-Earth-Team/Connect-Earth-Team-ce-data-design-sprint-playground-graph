@@ -25,7 +25,7 @@ def load_data(inputs):
 def get_column_pairs():
     """Map display names to actual column name pairs"""
     return {
-        "Electricity Consumption (kWh)": ("elec_consumption_kwh", "elec_consumption_modified"),
+        # "Electricity Consumption (kWh)": ("elec_consumption_kwh", "elec_consumption_modified"),
         "Electricity Spend (£)": ("elec_spend_gbp", "elec_spend_modified_gbp"),
         "Electricity Emissions (kg CO₂e)": ("elec_emissions_kg_co2e", "elec_emissions_modified_kg_co2e")
     }
@@ -61,7 +61,7 @@ def plot_chart(data, metric):
         x='Month',
         y='Value',
         color='View',
-        barmode='stack',
+        barmode='overlay',
         title=f"{metric} - Comparison View",
         color_discrete_map=color_discrete_map,
         category_orders={'View': ['modified', 'original']}
