@@ -1,3 +1,9 @@
-import streamlit as st
+import utils.display as display
 
-st.write("hello world")
+
+def main():
+    display.main()
+
+
+if __name__ == "__main__":
+    main()
