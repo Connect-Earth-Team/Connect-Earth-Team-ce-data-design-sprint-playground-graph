@@ -25,9 +25,9 @@ def load_data(inputs):
 def get_column_pairs():
     """Map display names to actual column name pairs"""
     return {
-        # "Electricity Consumption (kWh)": ("elec_consumption_kwh", "elec_consumption_modified"),
         "Electricity Bills (£)": ("elec_spend_gbp", "elec_spend_modified_gbp"),
-        "Electricity Emissions (kg CO₂e)": ("elec_emissions_kg_co2e", "elec_emissions_modified_kg_co2e")
+        "Electricity Emissions (kg CO₂e)": ("elec_emissions_kg_co2e", "elec_emissions_modified_kg_co2e"),
+        "Electricity Consumption (kWh)": ("elec_consumption_kwh", "elec_consumption_modified"),
     }
 
 def prepare_data_for_plotting(df, metric_display_name):
